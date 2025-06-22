@@ -12,35 +12,37 @@
 
   <script>
     let model;
+
     async function loadModel() {
       try {
         model = await tf.loadLayersModel(
-          'https://aicoo-dotcom.github.io/MALNUTRISI-SITEE/tfjs_model/model.json'
+          "https://aicoo-dotcom.github.io/MALNUTRISI-SITEE/tfjs_model/model.json"
         );
-        console.log("✅ Model berhasil dimuat");
+        console.log("✅ Model berhasil dimuat.");
       } catch (err) {
-        console.error("❌ Gagal load model:", err);
+        console.error("❌ Gagal memuat model:", err);
         document.getElementById("result").innerText = "Gagal memuat model.";
       }
     }
 
     async function predict() {
       const file = document.getElementById("imgInput").files[0];
-      if (!file) return;
+      if (!file || !model) return;
 
       const img = new Image();
-      img.crossOrigin = "anonymous"; // penting untuk GitHub Pages
       img.src = URL.createObjectURL(file);
+
       img.onload = async () => {
         const tensor = tf.browser.fromPixels(img)
           .resizeNearestNeighbor([224, 224])
           .toFloat()
-          .div(255.0)
+          .div(255)
           .expandDims();
 
         const pred = await model.predict(tensor).data();
         const labels = ["Undernutrition", "normal", "overnutrition"];
         const result = labels[pred.indexOf(Math.max(...pred))];
+
         document.getElementById("result").innerText = "Hasil: " + result;
       };
     }
