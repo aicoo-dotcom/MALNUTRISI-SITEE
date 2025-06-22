@@ -16,8 +16,8 @@
     async function loadModel() {
       try {
         model = await tf.loadLayersModel(
-          "https://aicoo-dotcom.github.io/MALNUTRISI-SITEE/tfjs_model/model.json"
-        );
+  "https://aicoo-dotcom.github.io/MALNUTRISI-SITEE/model.json"
+);
         console.log("✅ Model berhasil dimuat.");
       } catch (err) {
         console.error("❌ Gagal memuat model:", err);
